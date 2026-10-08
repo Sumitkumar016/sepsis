@@ -110,7 +110,7 @@ export default function PatientsDetailsPage() {
             <button
               // onClick={() => navigate("/result", { state: patient })}
               onClick={() => navigate("/result")}
-              className="w-full bg-gradient-to-r from-red-500 to-pink-500 px-4 py-3 rounded-xl text-white text-lg mt-10 hover:scale-105 transition"
+              className="w-full bg-[#14B87A] hover:bg-[#0F9F69] px-4 py-3 rounded-xl text-white text-sm font-semibold mt-10 transition cursor-pointer"
             >
               View Result
             </button>

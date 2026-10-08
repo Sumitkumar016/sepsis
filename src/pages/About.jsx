@@ -1,226 +1,219 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { 
-  Activity, ShieldAlert, Cpu, HeartPulse, 
-  Users, Code, BrainCircuit, Clock, CheckCircle2,
-  AlertTriangle, Stethoscope, ArrowLeft
-} from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  Activity,
+  ShieldAlert,
+  Cpu,
+  HeartPulse,
+  Users,
+  Code,
+  BrainCircuit,
+  Clock,
+  CheckCircle2,
+  AlertTriangle,
+  Stethoscope,
+  ArrowLeft,
+} from "lucide-react";
+import ThemeToggle from "../components/ThemeToggle";
 
 export default function About() {
-  // Animation variants setup
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.15 }
-    }
+      transition: { staggerChildren: 0.1 },
+    },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
   };
 
   const teamMembers = [
-    { name: 'Risham Soni', role: 'REACT Eng.', initials: 'RS', color: 'bg-blue-500' },
-    { name: 'Khushi Suryawanshi', role: 'AIML Eng.', initials: 'SS', color: 'bg-emerald-500' },
-    { name: 'Vaishnavi Kumari', role: 'AIML Eng.', initials: 'VK', color: 'bg-indigo-500' },
-    // { name: 'Priyanshu Raj', role: 'AIML Eng.', initials: 'PR', color: 'bg-rose-500' },
-    { name: 'Sumit Kumar', role: 'REACT Eng.', initials: 'SK', color: 'bg-yellow-500' },
+    { name: "Risham Soni", role: "React Engineer", initials: "RS", color: "bg-[#14B87A]" },
+    { name: "Khushi Suryawanshi", role: "AI/ML Engineer", initials: "KS", color: "bg-[#0F766E]" },
+    { name: "Vaishnavi Kumari", role: "AI/ML Engineer", initials: "VK", color: "bg-[#0F9F69]" },
+    { name: "Sumit Kumar", role: "React Engineer", initials: "SK", color: "bg-[#15803D]" },
   ];
 
   const techStack = [
-    { name: 'React', category: 'Frontend', color: 'text-cyan-400' },
-    { name: 'Tailwind CSS', category: 'Styling', color: 'text-teal-400' },
-    { name: 'Node.js', category: 'Backend', color: 'text-green-500' },
-    { name: 'Express', category: 'Server', color: 'text-gray-300' },
-    { name: 'Python', category: 'Machine Learning', color: 'text-yellow-400' },
-    { name: 'Scikit-Learn', category: 'ML Model', color: 'text-orange-500' },
+    { name: "React 19", category: "Frontend" },
+    { name: "Tailwind CSS v4", category: "Styling" },
+    { name: "Redux Toolkit", category: "State Management" },
+    { name: "Firebase", category: "Auth & Firestore" },
+    { name: "Recharts & Chart.js", category: "Data Visualization" },
+    { name: "Python / ML API", category: "Prediction Engine" },
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0f1c] text-slate-200 py-12 px-6 md:px-12 font-sans overflow-x-hidden selection:bg-blue-500/30">
-      
-      {/* Background ambient glows */}
-      <div className="fixed top-[10%] left-[10%] w-[400px] h-[400px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
-      <div className="fixed bottom-[10%] right-[10%] w-[400px] h-[400px] bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
-
-      <motion.div 
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B1220] text-[#172033] dark:text-[#F8FAFC] py-8 px-4 sm:px-6 md:px-10 font-sans transition-colors">
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="max-w-5xl mx-auto relative z-10 space-y-16"
+        className="max-w-5xl mx-auto space-y-10"
       >
-        
         {/* Header Section */}
-        <motion.div variants={itemVariants} className="text-center space-y-4 pt-10 relative">
-          <Link to="/" className="absolute top-0 left-0 inline-flex items-center text-sm font-medium text-slate-400 hover:text-white transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Dashboard
-          </Link>
-          <div className="inline-flex items-center justify-center p-3 sm:p-4 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-4 shadow-[0_0_30px_rgba(59,130,246,0.15)] mt-8 sm:mt-0">
-            <BrainCircuit className="w-8 h-8 sm:w-10 sm:h-10" />
+        <motion.div variants={itemVariants} className="space-y-3 relative pb-2 border-b border-[#E2E8F0] dark:border-[#273449]">
+          <div className="flex items-center justify-between">
+            <Link
+              to="/"
+              className="inline-flex items-center text-xs sm:text-sm font-semibold text-[#14B87A] dark:text-[#35D39A] hover:text-[#0F9F69] transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 mr-1.5" /> Back to Dashboard
+            </Link>
+            <ThemeToggle size="sm" />
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-blue-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent tracking-tight leading-tight">
-            Early Sepsis Risk<br className="hidden sm:block" /> Prediction System
-          </h1>
-          <p className="text-slate-400 text-lg sm:text-xl max-w-2xl mx-auto font-light">
-            An advanced AI-driven healthcare dashboard designed to proactively detect and explain sepsis risk, saving lives through timely medical intervention.
-          </p>
+
+          <div className="text-center pt-2">
+            <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-[#E8F8F2] dark:bg-[#14B87A]/20 text-[#0F9F69] dark:text-[#35D39A] border border-[#A8E3CF] dark:border-[#14B87A]/40 mb-3 shadow-xs">
+              <BrainCircuit className="w-8 h-8 text-[#14B87A]" />
+            </div>
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-[#172033] dark:text-[#F8FAFC] tracking-tight">
+              Early Sepsis Risk Prediction Platform
+            </h1>
+            <p className="text-[#526174] dark:text-[#94A3B8] text-xs sm:text-sm max-w-2xl mx-auto mt-2 leading-relaxed">
+              Clinical decision-support system applying machine learning to proactively detect sepsis biomarkers and alert care teams before rapid physiological deterioration.
+            </p>
+          </div>
         </motion.div>
 
         {/* Section 1 & 2: What & Why (Grid) */}
-        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          
+        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Card: What is Sepsis */}
-          <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 shadow-xl relative overflow-hidden group hover:bg-slate-800/60 transition-colors">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-opacity group-hover:opacity-100 opacity-0 pointer-events-none"></div>
-            <div className="flex items-center mb-6">
-              <div className="p-3 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 mr-4 shadow-inner">
-                <AlertTriangle className="w-6 h-6" />
+          <div className="bg-[#FFFFFF] dark:bg-[#172033] border border-[#E2E8F0] dark:border-[#273449] rounded-2xl p-5 sm:p-6 shadow-xs">
+            <div className="flex items-center mb-3">
+              <div className="p-2.5 rounded-xl bg-[#FEF2F2] dark:bg-[#2A1517] text-[#DC2626] dark:text-[#F87171] border border-[#F5B5B5] dark:border-[#4C1D24] mr-3">
+                <AlertTriangle className="w-5 h-5" />
               </div>
-              <h2 className="text-2xl font-bold text-white tracking-wide">What is Sepsis?</h2>
+              <h2 className="text-lg font-bold text-[#172033] dark:text-[#F8FAFC]">What is Sepsis?</h2>
             </div>
-            <p className="text-slate-300 leading-relaxed text-lg font-light">
-              Sepsis is a life-threatening medical emergency caused by the body's extreme, overactive response to an infection. It rapidly damages tissues and organs, making it one of the leading causes of death in hospitals worldwide if not diagnosed immediately.
+            <p className="text-[#526174] dark:text-[#CBD5E1] text-xs sm:text-sm leading-relaxed">
+              Sepsis is a medical emergency caused by the body's dysregulated response to an infection. It damages tissues and organs, standing as one of the leading causes of inpatient mortality without prompt identification and targeted antimicrobial therapy.
             </p>
           </div>
 
           {/* Card: Why Early Prediction */}
-          <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 shadow-xl relative overflow-hidden group hover:bg-slate-800/60 transition-colors">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16 transition-opacity group-hover:opacity-100 opacity-0 pointer-events-none"></div>
-            <div className="flex items-center mb-6">
-              <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mr-4 shadow-inner">
-                <HeartPulse className="w-6 h-6" />
+          <div className="bg-[#FFFFFF] dark:bg-[#172033] border border-[#E2E8F0] dark:border-[#273449] rounded-2xl p-5 sm:p-6 shadow-xs">
+            <div className="flex items-center mb-3">
+              <div className="p-2.5 rounded-xl bg-[#ECFDF3] dark:bg-[#102419] text-[#15803D] dark:text-[#34D399] border border-[#BBE7C8] dark:border-[#1E432E] mr-3">
+                <HeartPulse className="w-5 h-5" />
               </div>
-              <h2 className="text-2xl font-bold text-white tracking-wide">Why Early Prediction?</h2>
+              <h2 className="text-lg font-bold text-[#172033] dark:text-[#F8FAFC]">Why Early Prediction?</h2>
             </div>
-            <ul className="space-y-4">
+            <ul className="space-y-2.5 text-xs sm:text-sm">
               {[
-                { text: 'Prevent irreversible multiple organ failure', icon: ShieldAlert, color: 'text-amber-400' },
-                { text: 'Drastically reduce hospital mortality rates', icon: Activity, color: 'text-rose-400' },
-                { text: 'Enable timely, life-saving antibiotic treatment', icon: Stethoscope, color: 'text-blue-400' }
+                { text: "Prevents irreversible multiple organ dysfunction syndrome", icon: ShieldAlert, color: "text-[#B45309]" },
+                { text: "Significantly decreases ICU admission duration and mortality", icon: Activity, color: "text-[#DC2626]" },
+                { text: "Accelerates targeted antibiotic administration within the golden hour", icon: Stethoscope, color: "text-[#14B87A]" },
               ].map((item, i) => (
-                <li key={i} className="flex items-start">
-                  <item.icon className={`w-5 h-5 mr-3 mt-1 shrink-0 ${item.color}`} />
-                  <span className="text-slate-300 text-lg font-light leading-relaxed">{item.text}</span>
+                <li key={i} className="flex items-start text-[#526174] dark:text-[#CBD5E1]">
+                  <item.icon className={`w-4 h-4 mr-2 mt-0.5 shrink-0 ${item.color}`} />
+                  <span>{item.text}</span>
                 </li>
               ))}
             </ul>
           </div>
-
         </motion.div>
 
-        {/* Divider */}
-        <motion.div variants={itemVariants} className="w-full h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent"></motion.div>
-
-        {/* Section 3 & 4: How AI Works & Key Features (Grid) */}
-        <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
+        {/* Section 3 & 4: How AI Works & Key Features */}
+        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Card: How AI Works */}
-          <div className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-xl border border-indigo-500/20 rounded-3xl p-8 shadow-lg shadow-indigo-500/5 relative overflow-hidden">
-            <div className="flex items-center mb-8 pb-4 border-b border-white/5">
-              <div className="p-3 rounded-xl bg-indigo-500/20 text-indigo-400 mr-4 shadow-inner">
-                <Cpu className="w-6 h-6" />
+          <div className="bg-[#FFFFFF] dark:bg-[#172033] border border-[#E2E8F0] dark:border-[#273449] rounded-2xl p-5 sm:p-6 shadow-xs">
+            <div className="flex items-center mb-4">
+              <div className="p-2.5 rounded-xl bg-[#E8F8F2] dark:bg-[#14B87A]/20 text-[#0F9F69] dark:text-[#35D39A] border border-[#A8E3CF] dark:border-[#14B87A]/40 mr-3">
+                <Cpu className="w-5 h-5 text-[#14B87A]" />
               </div>
-              <h2 className="text-2xl font-bold text-white tracking-wide">How AI Works Here</h2>
+              <h2 className="text-lg font-bold text-[#172033] dark:text-[#F8FAFC]">Predictive Pipeline</h2>
             </div>
-            
-            <div className="relative border-l-2 border-indigo-500/30 pl-6 space-y-8 ml-3">
-              <div className="relative">
-                <span className="absolute -left-[35px] top-1 w-4 h-4 rounded-full bg-indigo-500 border-4 border-[#0a0f1c] shadow-[0_0_10px_rgba(99,102,241,0.5)]"></span>
-                <h3 className="text-white font-semibold text-lg">1. Data Ingestion</h3>
-                <p className="text-slate-400 mt-1 font-light leading-relaxed">Continuously analyzes patient vital signs, demographic data, and recent laboratory test results in real-time.</p>
+
+            <div className="space-y-3.5 text-xs sm:text-sm">
+              <div className="p-3 rounded-xl bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#273449]">
+                <h3 className="font-bold text-[#172033] dark:text-[#F8FAFC]">1. Real-time Telemetry</h3>
+                <p className="text-[#526174] dark:text-[#94A3B8] mt-0.5">Captures heart rate, arterial pressure, temperature, WBC, oxygen saturation, and glucose.</p>
               </div>
-              <div className="relative">
-                <span className="absolute -left-[35px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-[#0a0f1c] shadow-[0_0_10px_rgba(59,130,246,0.5)]"></span>
-                <h3 className="text-white font-semibold text-lg">2. Machine Learning Analysis</h3>
-                <p className="text-slate-400 mt-1 font-light leading-relaxed">A trained LightGBM/XGBoost model evaluates complex physiological patterns invisible to the naked eye.</p>
+              <div className="p-3 rounded-xl bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#273449]">
+                <h3 className="font-bold text-[#172033] dark:text-[#F8FAFC]">2. Microservice Inference</h3>
+                <p className="text-[#526174] dark:text-[#94A3B8] mt-0.5">Evaluates complex non-linear clinical feature combinations via remote REST API endpoint.</p>
               </div>
-              <div className="relative">
-                <span className="absolute -left-[35px] top-1 w-4 h-4 rounded-full bg-cyan-500 border-4 border-[#0a0f1c] shadow-[0_0_10px_rgba(6,182,212,0.5)]"></span>
-                <h3 className="text-white font-semibold text-lg">3. Risk Scoring & Explanation</h3>
-                <p className="text-slate-400 mt-1 font-light leading-relaxed">Outputs a definitive risk probability score alongside an Explainable AI breakdown showing exactly which factors drove the prediction.</p>
+              <div className="p-3 rounded-xl bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#273449]">
+                <h3 className="font-bold text-[#172033] dark:text-[#F8FAFC]">3. Explainable AI Scoring</h3>
+                <p className="text-[#526174] dark:text-[#94A3B8] mt-0.5">Generates probability risk rating with biomarker weight contributions for clinical transparency.</p>
               </div>
             </div>
           </div>
 
           {/* Card: Key Features */}
-          <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 shadow-xl flex flex-col justify-center">
-            <div className="flex items-center mb-8">
-              <div className="p-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 mr-4 shadow-inner">
-                <CheckCircle2 className="w-6 h-6" />
+          <div className="bg-[#FFFFFF] dark:bg-[#172033] border border-[#E2E8F0] dark:border-[#273449] rounded-2xl p-5 sm:p-6 shadow-xs">
+            <div className="flex items-center mb-4">
+              <div className="p-2.5 rounded-xl bg-[#E8F8F2] dark:bg-[#14B87A]/20 text-[#0F9F69] dark:text-[#35D39A] border border-[#A8E3CF] dark:border-[#14B87A]/40 mr-3">
+                <CheckCircle2 className="w-5 h-5 text-[#14B87A]" />
               </div>
-              <h2 className="text-2xl font-bold text-white tracking-wide">Key Features</h2>
+              <h2 className="text-lg font-bold text-[#172033] dark:text-[#F8FAFC]">Core Capabilities</h2>
             </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { title: 'Early Prediction', desc: 'Forecasts sepsis onset 6–12 hours before clinical recognition.', icon: Clock, color: 'text-amber-400', bg: 'bg-amber-400/10' },
-                { title: 'Real-time Monitoring', desc: 'Live dashboard updating seamlessly with new patient vitals.', icon: Activity, color: 'text-rose-400', bg: 'bg-rose-400/10' },
-                { title: 'Explainable Insights', desc: 'SHAP/LIME-based insights for complete clinical transparency.', icon: BrainCircuit, color: 'text-indigo-400', bg: 'bg-indigo-400/10' },
-                { title: 'Actionable Alerts', desc: 'Smart notification system cutting through alarm fatigue.', icon: ShieldAlert, color: 'text-emerald-400', bg: 'bg-emerald-400/10' }
+                { title: "Early Prediction", desc: "Flags physiological deviation hours before severe shock.", icon: Clock, color: "text-[#B45309]" },
+                { title: "Live Ward Telemetry", desc: "Centralized doctor dashboard with patient acuity queues.", icon: Activity, color: "text-[#DC2626]" },
+                { title: "Transparent XAI", desc: "Biomarker contribution charts to avoid black-box mistrust.", icon: BrainCircuit, color: "text-[#14B87A]" },
+                { title: "Specialist Chat", desc: "Instant clinical consultation channel for rapid triage.", icon: ShieldAlert, color: "text-[#0F766E]" },
               ].map((feature, idx) => (
-                <div key={idx} className="p-5 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                  <feature.icon className={`w-6 h-6 mb-3 ${feature.color}`} />
-                  <h3 className="text-white font-semibold mb-1">{feature.title}</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed">{feature.desc}</p>
+                <div key={idx} className="p-3 rounded-xl bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#273449]">
+                  <feature.icon className={`w-4 h-4 mb-1.5 ${feature.color}`} />
+                  <h3 className="text-xs font-bold text-[#172033] dark:text-[#F8FAFC]">{feature.title}</h3>
+                  <p className="text-[11px] text-[#526174] dark:text-[#94A3B8] mt-0.5 leading-relaxed">{feature.desc}</p>
                 </div>
               ))}
             </div>
           </div>
-
         </motion.div>
 
-        {/* Divider */}
-        <motion.div variants={itemVariants} className="w-full h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent"></motion.div>
-
-        {/* Section 5 & 6: Stack & Team */}
-        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-12">
-          
-          {/* Card: Team Members */}
-          <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 shadow-xl">
-            <div className="flex items-center mb-8">
-              <div className="p-3 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20 mr-4 shadow-inner">
-                <Users className="w-6 h-6" />
+        {/* Section 5 & 6: Team & Tech Stack */}
+        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-5 pb-6">
+          {/* Team */}
+          <div className="bg-[#FFFFFF] dark:bg-[#172033] border border-[#E2E8F0] dark:border-[#273449] rounded-2xl p-5 sm:p-6 shadow-xs">
+            <div className="flex items-center mb-4">
+              <div className="p-2.5 rounded-xl bg-[#E8F8F2] dark:bg-[#14B87A]/20 text-[#0F9F69] dark:text-[#35D39A] border border-[#A8E3CF] dark:border-[#14B87A]/40 mr-3">
+                <Users className="w-5 h-5 text-[#14B87A]" />
               </div>
-              <h2 className="text-2xl font-bold text-white tracking-wide">Project Team</h2>
+              <h2 className="text-lg font-bold text-[#172033] dark:text-[#F8FAFC]">Engineering Team</h2>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {teamMembers.map((member, i) => (
-                <div key={i} className="flex items-center p-3 rounded-2xl hover:bg-slate-700/30 transition-colors">
-                  <div className={`w-12 h-12 rounded-full ${member.color} text-white flex items-center justify-center font-bold text-lg shadow-md mr-4 shrink-0`}>
+                <div key={i} className="flex items-center p-2.5 rounded-xl bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#273449]">
+                  <div className={`w-9 h-9 rounded-full ${member.color} text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0`}>
                     {member.initials}
                   </div>
-                  <div>
-                    <h3 className="text-white font-semibold">{member.name}</h3>
-                    <p className="text-slate-400 text-sm">{member.role}</p>
+                  <div className="min-w-0">
+                    <h3 className="text-xs font-bold text-[#172033] dark:text-[#F8FAFC] truncate">{member.name}</h3>
+                    <p className="text-[11px] text-[#526174] dark:text-[#94A3B8] truncate">{member.role}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Card: Tech Stack */}
-          <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 shadow-xl">
-            <div className="flex items-center mb-8">
-              <div className="p-3 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 mr-4 shadow-inner">
-                <Code className="w-6 h-6" />
+          {/* Tech Stack */}
+          <div className="bg-[#FFFFFF] dark:bg-[#172033] border border-[#E2E8F0] dark:border-[#273449] rounded-2xl p-5 sm:p-6 shadow-xs">
+            <div className="flex items-center mb-4">
+              <div className="p-2.5 rounded-xl bg-[#E8F8F2] dark:bg-[#14B87A]/20 text-[#0F9F69] dark:text-[#35D39A] border border-[#A8E3CF] dark:border-[#14B87A]/40 mr-3">
+                <Code className="w-5 h-5 text-[#14B87A]" />
               </div>
-              <h2 className="text-2xl font-bold text-white tracking-wide">Technology Stack</h2>
+              <h2 className="text-lg font-bold text-[#172033] dark:text-[#F8FAFC]">Technology Stack</h2>
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2">
               {techStack.map((tech, i) => (
-                <div key={i} className="px-4 py-2 rounded-xl bg-slate-900/80 border border-slate-700 flex flex-col justify-center">
-                  <span className={`font-bold ${tech.color}`}>{tech.name}</span>
-                  <span className="text-slate-500 text-xs mt-0.5 uppercase tracking-wider">{tech.category}</span>
+                <div key={i} className="px-3 py-1.5 rounded-xl bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#273449] text-xs">
+                  <span className="font-bold text-[#172033] dark:text-[#F8FAFC] block">{tech.name}</span>
+                  <span className="text-[10px] text-[#7A8798] dark:text-[#94A3B8] uppercase tracking-wider block">{tech.category}</span>
                 </div>
               ))}
             </div>
           </div>
-
         </motion.div>
-
       </motion.div>
     </div>
   );

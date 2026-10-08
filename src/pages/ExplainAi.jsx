@@ -1,70 +1,88 @@
-import { Link } from 'react-router-dom';
-import { Network, Activity, HeartPulse, Droplets, Thermometer, Info, BrainCircuit, ArrowLeft } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from 'recharts';
+import { Link } from "react-router-dom";
+import {
+  Network,
+  HeartPulse,
+  Droplets,
+  Thermometer,
+  Info,
+  BrainCircuit,
+  ArrowLeft,
+  Activity,
+} from "lucide-react";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip as RechartsTooltip,
+  Legend,
+} from "recharts";
+import ThemeToggle from "../components/ThemeToggle";
+import { useTheme } from "../context/ThemeContext";
 
 const features = [
   {
     id: 1,
-    name: 'Heart Rate',
+    name: "Heart Rate",
     value: 35,
     icon: HeartPulse,
-    color: 'from-rose-500 to-red-500',
-    fill: '#ef4444',
-    description: 'Elevated heart rate detected',
+    barColor: "bg-[#DC2626]",
+    fill: "#DC2626",
+    description: "Elevated heart rate detected (>90 bpm)",
   },
   {
     id: 2,
-    name: 'Temperature',
+    name: "Temperature",
     value: 20,
     icon: Thermometer,
-    color: 'from-orange-400 to-amber-500',
-    fill: '#f97316',
-    description: 'Fever detected',
+    barColor: "bg-[#B45309]",
+    fill: "#B45309",
+    description: "Abnormal temperature detected",
   },
   {
     id: 3,
-    name: 'WBC Count',
+    name: "WBC Count",
     value: 15,
     icon: Activity,
-    color: 'from-blue-400 to-cyan-500',
-    fill: '#06b6d4',
-    description: 'Elevated WBC indicates infection',
+    barColor: "bg-[#0F766E]",
+    fill: "#0F766E",
+    description: "Elevated WBC indicates infection",
   },
   {
     id: 4,
-    name: 'Blood Pressure',
+    name: "Blood Pressure",
     value: 10,
     icon: Activity,
-    color: 'from-emerald-400 to-teal-500',
-    fill: '#14b8a6',
-    description: 'Low blood pressure detected',
+    barColor: "bg-[#14B87A]",
+    fill: "#14B87A",
+    description: "Low arterial pressure detected",
   },
   {
     id: 5,
-    name: 'Oxygen',
+    name: "Oxygen",
     value: 10,
     icon: Droplets,
-    color: 'from-purple-400 to-indigo-500',
-    fill: '#8b5cf6',
-    description: 'Oxygen saturation is low',
+    barColor: "bg-[#15803D]",
+    fill: "#15803D",
+    description: "Oxygen saturation level is sub-optimal",
   },
   {
     id: 6,
-    name: 'Respiratory Rate',
+    name: "Respiratory Rate",
     value: 5,
     icon: Activity,
-    color: 'from-cyan-400 to-blue-500',
-    fill: '#3b82f6',
-    description: 'Abnormal breathing rate',
+    barColor: "bg-[#64748B]",
+    fill: "#64748B",
+    description: "Abnormal tachypnea breathing pattern",
   },
   {
     id: 7,
-    name: 'Glucose',
+    name: "Glucose",
     value: 5,
     icon: Activity,
-    color: 'from-yellow-400 to-orange-500',
-    fill: '#f59e0b',
-    description: 'Glucose imbalance',
+    barColor: "bg-[#94A3B8]",
+    fill: "#94A3B8",
+    description: "Glucose level elevation",
   },
 ];
 
@@ -72,108 +90,122 @@ const topFeature = features.reduce((highest, feature) => {
   if (!highest || feature.value > highest.value) {
     return feature;
   }
-
   return highest;
 }, null);
 
 export default function ExplainAi() {
+  const { isDark } = useTheme();
+
   return (
-    <div className="min-h-screen bg-[#0a0a0c] text-gray-100 p-6 font-sans selection:bg-indigo-500/30">
-      <div className="max-w-6xl mx-auto space-y-8">
-        
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B1220] text-[#172033] dark:text-[#F8FAFC] p-4 sm:p-6 lg:p-8 font-sans transition-colors">
+      <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-[#E2E8F0] dark:border-[#273449]">
           <div>
-            <Link to="/" className="inline-flex items-center text-sm font-medium text-indigo-400 hover:text-indigo-300 mb-4 transition-colors">
-              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Dashboard
+            <Link
+              to="/"
+              className="inline-flex items-center text-xs sm:text-sm font-semibold text-[#14B87A] dark:text-[#35D39A] hover:text-[#0F9F69] mb-2 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 mr-1.5" /> Back to Dashboard
             </Link>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent flex items-center">
-              <BrainCircuit className="w-8 h-8 text-indigo-500 mr-3" />
-              Machine Learning Insight
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#172033] dark:text-[#F8FAFC] flex items-center">
+              <BrainCircuit className="w-7 h-7 text-[#14B87A] mr-2.5" />
+              Explainable AI (XAI) Insight
             </h1>
-            <p className="text-gray-400 mt-2 max-w-xl text-sm leading-relaxed">
-              Transparent breakdown of the predictive model's decision, illustrating exactly which patient vitals drove the high-risk classification.
+            <p className="text-xs sm:text-sm text-[#526174] dark:text-[#94A3B8] mt-1 max-w-xl">
+              Transparent biomarker breakdown illustrating which patient vitals drove the sepsis prediction.
             </p>
           </div>
-          <div className="px-6 py-4 rounded-2xl bg-gray-900/40 border border-gray-800 backdrop-blur-xl flex flex-col items-end shadow-lg relative overflow-hidden">
-            <div className="absolute -top-4 -right-4 w-16 h-16 bg-red-500/10 blur-xl rounded-full"></div>
-            <span className="text-gray-400 text-xs uppercase tracking-widest font-semibold mb-1">Overall Risk Score</span>
-            <span className="text-4xl font-black text-red-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.4)] tracking-tight">85%</span>
+
+          <div className="flex items-center gap-3 self-start sm:self-auto">
+            <div className="px-4 py-2 rounded-2xl bg-[#FFFFFF] dark:bg-[#172033] border border-[#E2E8F0] dark:border-[#273449] flex flex-col items-end shadow-xs">
+              <span className="text-[10px] text-[#7A8798] dark:text-[#94A3B8] uppercase tracking-widest font-bold">
+                Benchmark Risk
+              </span>
+              <span className="text-2xl sm:text-3xl font-black text-[#DC2626] dark:text-[#F87171]">85%</span>
+            </div>
+            <ThemeToggle size="sm" />
           </div>
         </div>
 
         {/* AI Insight Box */}
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-gray-900 via-[#111827] to-[#0f172a] border border-indigo-500/20 shadow-[0_0_30px_rgba(99,102,241,0.05)] relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px] -mr-20 -mt-20 transition-opacity duration-700 group-hover:opacity-100 opacity-50 pointer-events-none"></div>
-          <div className="relative z-10 flex items-start gap-5">
-            <div className="p-3 bg-indigo-500/10 rounded-xl text-indigo-400 shrink-0 border border-indigo-500/20 shadow-inner">
-              <Info className="w-6 h-6" />
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#FFFFFF] dark:bg-[#172033] border border-[#A8E3CF] dark:border-[#14B87A]/30 shadow-xs relative overflow-hidden">
+          <div className="flex items-start gap-3.5">
+            <div className="p-2.5 bg-[#E8F8F2] dark:bg-[#14B87A]/20 rounded-xl text-[#0F9F69] dark:text-[#35D39A] shrink-0 border border-[#A8E3CF] dark:border-[#14B87A]/40">
+              <Info className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-100 mb-2 tracking-wide">Key Finding</h2>
-              <p className="text-gray-300 leading-relaxed text-lg font-light">
-                <span className="font-semibold text-rose-400 drop-shadow-sm">{topFeature?.name}</span> is the principal driving factor for this prediction, accounting for <span className="text-gray-100 font-medium tracking-wide">{topFeature?.value}%</span> of the risk score. The model suggests that combined abnormalities in vital signs indicate possible sepsis risk.
+              <h2 className="text-sm sm:text-base font-bold text-[#172033] dark:text-[#F8FAFC] mb-1">
+                Clinical Finding Summary
+              </h2>
+              <p className="text-xs sm:text-sm text-[#526174] dark:text-[#CBD5E1] leading-relaxed">
+                <strong className="text-[#DC2626] dark:text-[#F87171]">{topFeature?.name}</strong> is the principal driving factor for this prediction, accounting for{" "}
+                <span className="font-bold text-[#172033] dark:text-[#F8FAFC]">{topFeature?.value}%</span> of the risk score calculation. Multi-parameter vital sign abnormalities collectively elevate the probability of systematic infection.
               </p>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
-          {/* Feature Importance List */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-200 mb-6 flex items-center tracking-wide">
-              <Network className="w-5 h-5 mr-3 text-indigo-400" /> Factor Contribution %
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Factor Contribution List */}
+          <div className="space-y-3">
+            <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#526174] dark:text-[#94A3B8] flex items-center">
+              <Network className="w-4 h-4 mr-2 text-[#14B87A]" /> Factor Contribution %
             </h3>
-            
-            <div className="flex flex-col gap-4">
+
+            <div className="flex flex-col gap-2.5">
               {features.map((feature) => {
                 const Icon = feature.icon;
                 const isTopFactor = feature.id === topFeature?.id;
-                
+
                 return (
-                  <div 
-                    key={feature.id} 
-                    className={`p-5 rounded-2xl backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden border
-                      ${isTopFactor 
-                        ? 'bg-gray-900/60 border-rose-500/30 shadow-[0_4px_30px_rgba(225,29,72,0.1)]' 
-                        : 'bg-gray-900/30 border-gray-800/60 hover:border-gray-700/80 hover:bg-gray-900/50'
-                      }`}
+                  <div
+                    key={feature.id}
+                    className={`p-3.5 rounded-2xl transition-all duration-200 border ${
+                      isTopFactor
+                        ? "bg-[#FEF2F2]/40 dark:bg-[#2A1517]/30 border-[#F5B5B5] dark:border-[#4C1D24] shadow-xs"
+                        : "bg-[#FFFFFF] dark:bg-[#172033] border-[#E2E8F0] dark:border-[#273449]"
+                    }`}
                   >
-                    {isTopFactor && (
-                      <div className="absolute top-0 left-0 w-1 h-full bg-rose-500"></div>
-                    )}
-                    
-                    <div className="flex justify-between items-center mb-4 relative z-10">
-                      <div className="flex items-center gap-4">
-                        <div className={`p-2.5 rounded-xl bg-gray-950/50 text-gray-400 shadow-inner border border-gray-800/50 ${isTopFactor ? 'text-rose-400 border-rose-500/20 shadow-rose-900/20' : ''}`}>
-                          <Icon className="w-5 h-5" />
+                    <div className="flex justify-between items-center mb-2">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div
+                          className={`p-2 rounded-xl shrink-0 ${
+                            isTopFactor
+                              ? "bg-[#FEF2F2] dark:bg-[#2A1517] text-[#DC2626] dark:text-[#F87171]"
+                              : "bg-[#F1F5F9] dark:bg-[#1E293B] text-[#526174] dark:text-[#CBD5E1]"
+                          }`}
+                        >
+                          <Icon className="w-4 h-4" />
                         </div>
-                        <div>
-                          <div className="flex flex-wrap items-center gap-2">
-                            <h4 className={`text-base font-bold tracking-wide ${isTopFactor ? 'text-white' : 'text-gray-200'}`}>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-xs sm:text-sm font-bold text-[#172033] dark:text-[#F8FAFC] truncate">
                               {feature.name}
                             </h4>
                             {isTopFactor && (
-                              <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.2em] text-rose-300">
-                                Top Risk Factor
+                              <span className="rounded-full bg-[#FEF2F2] dark:bg-[#2A1517] text-[#DC2626] dark:text-[#F87171] border border-[#F5B5B5] dark:border-[#4C1D24] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shrink-0">
+                                Top Driver
                               </span>
                             )}
                           </div>
-                          <span className="text-sm font-medium text-gray-500">{feature.description}</span>
+                          <span className="text-[11px] text-[#526174] dark:text-[#94A3B8] block truncate">
+                            {feature.description}
+                          </span>
                         </div>
                       </div>
-                      <div className={`text-2xl font-bold tracking-tighter ${isTopFactor ? 'text-rose-400 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]' : 'text-gray-300'}`}>
+
+                      <div className="text-base sm:text-lg font-bold font-mono text-[#172033] dark:text-[#F8FAFC] shrink-0 ml-2">
                         {feature.value}%
                       </div>
                     </div>
-                    
+
                     {/* Progress Bar */}
-                    <div className="w-full h-3 bg-gray-950 rounded-full overflow-hidden shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)] relative">
-                      <div 
-                        className={`h-full rounded-full bg-gradient-to-r ${feature.color} relative shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]`}
+                    <div className="w-full h-2 bg-[#E2E8F0] dark:bg-[#273449] rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full ${feature.barColor}`}
                         style={{ width: `${feature.value}%` }}
-                      ></div>
+                      />
                     </div>
                   </div>
                 );
@@ -181,63 +213,59 @@ export default function ExplainAi() {
             </div>
           </div>
 
-          {/* Pie Chart */}
-          <div className="p-8 rounded-3xl bg-gray-900/30 backdrop-blur-2xl border border-gray-800/60 flex flex-col items-center justify-center relative shadow-2xl">
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-             
-             <h3 className="text-lg font-semibold text-gray-200 mb-6 w-full text-center tracking-wide">Model Weights Distribution</h3>
-             
-             <div className="w-full aspect-square max-h-80 relative z-10">
-               <ResponsiveContainer width="100%" height="100%">
-                 <PieChart>
-                   <Pie
-                     data={features}
-                     cx="50%"
-                     cy="50%"
-                     innerRadius={85}
-                     outerRadius={115}
-                     paddingAngle={6}
-                     dataKey="value"
-                     stroke="none"
-                     cornerRadius={4}
-                   >
-                     {features.map((entry, index) => (
-                       <Cell 
-                         key={`cell-${index}`} 
-                         fill={entry.fill} 
-                         className="hover:opacity-80 transition-opacity duration-300 cursor-pointer outline-none drop-shadow-md"
-                       />
-                     ))}
-                   </Pie>
-                   <RechartsTooltip 
-                     contentStyle={{
-                       backgroundColor: 'rgba(17, 24, 39, 0.95)',
-                       border: '1px solid rgba(75, 85, 99, 0.4)',
-                       borderRadius: '16px',
-                       boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
-                       color: '#f3f4f6',
-                       padding: '12px 16px'
-                     }}
-                     itemStyle={{ color: '#e5e7eb', fontWeight: 600, fontSize: '14px' }}
-                     formatter={(value) => [`${value}% Contribution`, '']}
-                   />
-                   <Legend 
-                     verticalAlign="bottom" 
-                     height={40} 
-                     iconType="circle"
-                     wrapperStyle={{ paddingTop: '30px', fontSize: '13px', color: '#9ca3af', fontWeight: 500 }}
-                   />
-                 </PieChart>
-               </ResponsiveContainer>
-               
-               {/* Center label for donut chart */}
-               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                 <span className="text-sm font-semibold text-gray-500 tracking-widest uppercase">Total</span>
-                 <span className="text-3xl font-bold text-gray-200 mt-1">100%</span>
-               </div>
-             </div>
+          {/* Model Weights Donut Chart */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-[#FFFFFF] dark:bg-[#172033] border border-[#E2E8F0] dark:border-[#273449] flex flex-col items-center justify-center relative shadow-xs">
+            <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#526174] dark:text-[#94A3B8] mb-4 w-full text-center">
+              Biomarker Weight Distribution
+            </h3>
+
+            <div className="w-full aspect-square max-h-72 relative">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={features}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={70}
+                    outerRadius={95}
+                    paddingAngle={4}
+                    dataKey="value"
+                    stroke="none"
+                    cornerRadius={4}
+                  >
+                    {features.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Pie>
+                  <RechartsTooltip
+                    contentStyle={{
+                      backgroundColor: isDark ? "#172033" : "#FFFFFF",
+                      border: isDark ? "1px solid #273449" : "1px solid #E2E8F0",
+                      borderRadius: "12px",
+                      color: isDark ? "#F8FAFC" : "#172033",
+                      fontSize: "12px",
+                    }}
+                    formatter={(value) => [`${value}% Contribution`, ""]}
+                  />
+                  <Legend
+                    verticalAlign="bottom"
+                    height={36}
+                    iconType="circle"
+                    wrapperStyle={{
+                      paddingTop: "15px",
+                      fontSize: "11px",
+                      color: isDark ? "#94A3B8" : "#526174",
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-9">
+                <span className="text-[10px] font-bold text-[#7A8798] dark:text-[#94A3B8] uppercase tracking-wider">Total</span>
+                <span className="text-xl sm:text-2xl font-black text-[#172033] dark:text-[#F8FAFC]">100%</span>
+              </div>
+            </div>
           </div>
-          
         </div>
       </div>
     </div>

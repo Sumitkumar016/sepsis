@@ -103,8 +103,11 @@ function App() {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center text-white bg-slate-900">
-        Loading...
+      <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] dark:bg-[#0B1220] text-[#172033] dark:text-[#F8FAFC]">
+        <div className="flex items-center gap-2.5 font-medium text-sm">
+          <div className="w-4 h-4 border-2 border-[#14B87A] border-t-transparent rounded-full animate-spin"></div>
+          <span>Loading SepsisAI...</span>
+        </div>
       </div>
     );
   }

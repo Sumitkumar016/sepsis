@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AlertCircle, Clock, Activity, ArrowRight, User, ArrowLeft } from "lucide-react";
+import { AlertCircle, Clock, Activity, ArrowRight, User, ArrowLeft, CheckCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { getHighRiskPatients } from "../store/doctor";
+import ThemeToggle from "../components/ThemeToggle";
 
 export default function AlertPage() {
   const dispatch = useDispatch();
@@ -20,107 +21,124 @@ export default function AlertPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 p-6 font-sans text-gray-100">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B1220] p-4 sm:p-6 lg:p-8 font-sans text-[#172033] dark:text-[#F8FAFC] transition-colors">
       <div className="max-w-4xl mx-auto space-y-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-2 border-b border-[#E2E8F0] dark:border-[#273449]">
           <div>
-            <Link to="/" className="inline-flex items-center text-sm font-medium text-red-500 hover:text-red-400 mb-4 transition-colors">
-              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Dashboard
+            <Link
+              to="/"
+              className="inline-flex items-center text-xs sm:text-sm font-semibold text-[#14B87A] dark:text-[#35D39A] hover:text-[#0F9F69] mb-2 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 mr-1.5" /> Back to Dashboard
             </Link>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-400 bg-clip-text text-transparent flex items-center">
-              <AlertCircle className="w-8 h-8 text-red-500 mr-3 animate-pulse" />
-              Active Alerts
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#172033] dark:text-[#F8FAFC] flex items-center">
+              <AlertCircle className="w-7 h-7 text-[#DC2626] mr-2.5 animate-pulse" />
+              Active Clinical Alerts
             </h1>
-            <p className="text-gray-400 mt-2">AI-driven sepsis risk monitoring system</p>
+            <p className="text-xs sm:text-sm text-[#526174] dark:text-[#94A3B8] mt-1">
+              Real-time sepsis risk alert queue for intensive monitoring
+            </p>
           </div>
-          <div className="flex items-center space-x-2 bg-gray-900/50 border border-gray-800 px-4 py-2 rounded-lg backdrop-blur-md">
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-            </span>
-            <span className="text-sm font-medium text-gray-300">Live Updates</span>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center space-x-2 bg-[#FFFFFF] dark:bg-[#172033] border border-[#E2E8F0] dark:border-[#273449] px-3 py-1.5 rounded-xl shadow-xs">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#14B87A] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#14B87A]"></span>
+              </span>
+              <span className="text-xs font-semibold text-[#526174] dark:text-[#CBD5E1]">Live Updates</span>
+            </div>
+            <ThemeToggle size="sm" />
           </div>
         </div>
 
-        <div className="space-y-5 flex flex-col items-stretch w-full">
+        <div className="space-y-4 flex flex-col items-stretch w-full">
           {highRiskPatients?.length > 0 ? (
             highRiskPatients.map((patient) => {
               const severity = getSeverity(Number(patient.prediction ?? 0));
               return (
                 <div
                   key={patient.id}
-                  className={`relative overflow-hidden group transition-all duration-300 ease-out hover:-translate-y-1 rounded-2xl p-6 backdrop-blur-xl bg-gray-900/40 border ${
+                  onClick={() => navigate(`/patient/${patient.id}`)}
+                  className={`relative overflow-hidden group transition-all duration-200 rounded-2xl p-4 sm:p-5 cursor-pointer bg-[#FFFFFF] dark:bg-[#172033] border shadow-xs hover:shadow-md ${
                     severity === "critical"
-                      ? "border-red-500/60 shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:shadow-[0_0_35px_rgba(239,68,68,0.6)]"
+                      ? "border-[#F5B5B5] dark:border-[#4C1D24] bg-[#FEF2F2]/30 dark:bg-[#2A1517]/30"
                       : severity === "high"
-                        ? "border-orange-500/40 hover:border-orange-500/60 hover:shadow-[0_0_20px_rgba(249,115,22,0.3)]"
-                        : "border-gray-800 hover:border-gray-700 hover:shadow-lg hover:shadow-gray-900/50"
+                      ? "border-[#F5D08A] dark:border-[#523B19] bg-[#FFF7E6]/30 dark:bg-[#2A1F11]/30"
+                      : "border-[#E2E8F0] dark:border-[#273449]"
                   }`}
                 >
-                  <div className="flex flex-col md:flex-row justify-between gap-6 relative z-10 w-full">
-                    <div className="flex items-start gap-5">
-                      <div className="flex-shrink-0 relative">
-                        {severity === "critical" && <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>}
-                        <div className={`flex items-center justify-center w-16 h-16 rounded-full border-2 shadow-inner ${
-                          severity === "critical"
-                            ? "border-red-500 bg-red-500/10 text-red-500 shadow-red-500/20"
-                            : severity === "high"
-                              ? "border-orange-500 bg-orange-500/10 text-orange-400 shadow-orange-500/20"
-                              : "border-blue-500 bg-blue-500/10 text-blue-400 shadow-blue-500/20"
-                        }`}>
-                          <span className="text-2xl font-bold">{Number(patient.prediction ?? 0)}<span className="text-sm">%</span></span>
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10 w-full">
+                    <div className="flex items-center gap-4">
+                      <div className="shrink-0 relative">
+                        {severity === "critical" && (
+                          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#DC2626] rounded-full animate-ping"></span>
+                        )}
+                        <div
+                          className={`flex items-center justify-center w-13 h-13 rounded-2xl border font-black text-lg ${
+                            severity === "critical"
+                              ? "border-[#F5B5B5] dark:border-[#4C1D24] bg-[#FEF2F2] dark:bg-[#2A1517] text-[#DC2626] dark:text-[#F87171]"
+                              : severity === "high"
+                              ? "border-[#F5D08A] dark:border-[#523B19] bg-[#FFF7E6] dark:bg-[#2A1F11] text-[#B45309] dark:text-[#FBBF24]"
+                              : "border-[#BBE7C8] dark:border-[#1E432E] bg-[#ECFDF3] dark:bg-[#102419] text-[#15803D] dark:text-[#34D399]"
+                          }`}
+                        >
+                          {Number(patient.prediction ?? 0)}%
                         </div>
                       </div>
 
-                      <div className="space-y-1.5 pt-1">
-                        <div className="flex items-center gap-3">
-                          <h2 className="text-xl font-semibold text-gray-100 flex items-center tracking-wide">
-                            <User className="w-5 h-5 mr-2 text-gray-500" />
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h2 className="text-base font-bold text-[#172033] dark:text-[#F8FAFC] flex items-center">
+                            <User className="w-4 h-4 mr-1 text-[#7A8798] dark:text-[#94A3B8]" />
                             {patient.patientName}
                           </h2>
-                          {severity === "critical" && (
-                            <span className="px-2.5 py-1 text-xs font-bold uppercase tracking-widest text-red-100 bg-red-600/90 border border-red-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.6)]">
-                              Critical
-                            </span>
-                          )}
+                          <span
+                            className={`px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full border ${
+                              severity === "critical"
+                                ? "bg-[#FEF2F2] dark:bg-[#2A1517] text-[#DC2626] dark:text-[#F87171] border-[#F5B5B5] dark:border-[#4C1D24]"
+                                : "bg-[#FFF7E6] dark:bg-[#2A1F11] text-[#B45309] dark:text-[#FBBF24] border-[#F5D08A] dark:border-[#523B19]"
+                            }`}
+                          >
+                            {severity === "critical" ? "Critical Risk" : "High Risk"}
+                          </span>
                         </div>
-                        <div className="flex items-center text-sm text-gray-400 font-medium">
-                          <Clock className="w-4 h-4 mr-1.5" />
-                          Alert flagged from latest patient update
+                        <div className="flex items-center text-xs text-[#526174] dark:text-[#94A3B8]">
+                          <Clock className="w-3.5 h-3.5 mr-1" />
+                          Flagged from recent vital changes
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex-1 md:max-w-md p-4 rounded-xl bg-gray-950/60 border border-gray-800/80 shadow-inner group-hover:bg-gray-950/80 transition-colors">
-                      <div className="flex items-center text-sm font-medium text-gray-400 mb-2 tracking-wide uppercase">
-                        <Activity className="w-4 h-4 mr-2 text-blue-400" />
+                    <div className="w-full md:w-auto md:max-w-md p-3 rounded-xl bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#273449] text-xs">
+                      <div className="flex items-center text-[11px] font-bold text-[#526174] dark:text-[#94A3B8] mb-1 uppercase tracking-wider">
+                        <Activity className="w-3.5 h-3.5 mr-1.5 text-[#14B87A]" />
                         Suggested Action
                       </div>
-                      <p className={`text-base font-medium leading-relaxed ${severity === "critical" ? "text-red-200" : "text-gray-200"}`}>
+                      <p className="font-medium text-[#172033] dark:text-[#CBD5E1] leading-relaxed">
                         {Number(patient.prediction ?? 0) >= 85
-                          ? "Immediate ICU transfer & start broad-spectrum antibiotics"
+                          ? "Immediate ICU transfer & start broad-spectrum antibiotics protocol."
                           : Number(patient.prediction ?? 0) >= 60
-                            ? "Review lactic acid lab results and monitor vitals closely"
-                            : "Standard monitoring protocol"}
+                          ? "Review lactic acid lab results and monitor vitals closely."
+                          : "Standard monitoring protocol."}
                       </p>
                     </div>
 
-                    <div className="hidden md:flex items-center justify-center pl-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-2">
-                      <button onClick={() => navigate(`/patient/${patient.id}`)} className="p-3 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 transition-colors ring-1 ring-gray-700">
-                        <ArrowRight className="w-5 h-5" />
-                      </button>
+                    <div className="hidden md:flex items-center text-[#7A8798] group-hover:text-[#14B87A] transition-colors">
+                      <ArrowRight className="w-5 h-5" />
                     </div>
                   </div>
-
-                  {severity === "critical" && (
-                    <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-red-500 opacity-[0.05] rounded-full blur-3xl pointer-events-none group-hover:opacity-10 transition-opacity duration-300"></div>
-                  )}
                 </div>
               );
             })
           ) : (
-            <div className="rounded-2xl border border-gray-800 bg-gray-900/40 p-8 text-gray-400">
-              No active high-risk alerts.
+            <div className="rounded-2xl border border-[#E2E8F0] dark:border-[#273449] bg-[#FFFFFF] dark:bg-[#172033] p-10 text-center shadow-xs">
+              <div className="w-10 h-10 rounded-full bg-[#ECFDF3] dark:bg-[#102419] text-[#15803D] dark:text-[#34D399] flex items-center justify-center mx-auto mb-3 border border-[#BBE7C8] dark:border-[#1E432E]">
+                <CheckCircle className="w-5 h-5" />
+              </div>
+              <h3 className="text-sm font-bold text-[#172033] dark:text-[#F8FAFC]">No Critical Sepsis Alerts</h3>
+              <p className="text-xs text-[#526174] dark:text-[#94A3B8] max-w-sm mx-auto mt-1">
+                All monitored patients in this ward currently register within acceptable physiological vital thresholds.
+              </p>
             </div>
           )}
         </div>

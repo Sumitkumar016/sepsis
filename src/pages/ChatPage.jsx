@@ -2,10 +2,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, Bot, Send, ShieldAlert, Stethoscope } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ChatBubble from "../components/ChatBubble";
+import ThemeToggle from "../components/ThemeToggle";
 
-const INITIAL_MESSAGE = "Hello 👋 I'm your Sepsis Assistant. Tell me your symptoms.";
+const INITIAL_MESSAGE = "Hello 👋 I'm your Sepsis Assistant. Tell me your symptoms or latest vital readings.";
 
-const buildAvatar = (name, from = "#ef4444", to = "#ec4899") => {
+const buildAvatar = (name, from = "#14B87A", to = "#0F9F69") => {
   const cleanedName = name.replace(/^Dr\.?\s*/i, "").trim();
   const initials = cleanedName
     .split(" ")
@@ -44,40 +45,35 @@ const DEFAULT_DOCTOR = {
 const getBotReply = (message) => {
   const normalizedMessage = message.toLowerCase();
 
-  if (normalizedMessage.includes("fever")) {
-    return "Fever can be an early sign of sepsis. Monitor temperature closely.";
+  if (normalizedMessage.includes("fever") || normalizedMessage.includes("temp")) {
+    return "Fever (>38°C) or hypothermia (<36°C) can be an early biomarker of sepsis. If accompanied by confusion or rapid breathing, seek immediate medical care.";
   }
 
-  if (normalizedMessage.includes("heart")) {
-    return "Abnormal heart rate may indicate sepsis risk.";
+  if (normalizedMessage.includes("heart") || normalizedMessage.includes("pulse")) {
+    return "Tachycardia (heart rate > 90 bpm) combined with low blood pressure is a significant clinical flag for sepsis.";
   }
 
-  if (normalizedMessage.includes("oxygen")) {
-    return "Low oxygen level is critical. Please seek immediate care.";
+  if (normalizedMessage.includes("oxygen") || normalizedMessage.includes("breath")) {
+    return "Low oxygen saturation (< 92%) or high respiratory rate (> 20/min) indicates respiratory distress and potential sepsis.";
   }
 
-  if (normalizedMessage.includes("infection")) {
-    return "Infection can lead to sepsis if untreated.";
+  if (normalizedMessage.includes("infection") || normalizedMessage.includes("wound")) {
+    return "Untreated localized infections (urinary, lung, abdominal, skin) can rapidly progress to sepsis. Consult a physician promptly.";
   }
 
-  if (normalizedMessage.includes("blood pressure") || normalizedMessage.includes("bp")) {
-    return "Low blood pressure is a serious sign of sepsis.";
-  }
-
-  if (normalizedMessage.includes("sepsis")) {
-    return "Sepsis is life-threatening. Immediate medical attention required.";
-  }
-
-  return "I'm here to help with sepsis-related symptoms. Please describe clearly.";
+  return "Thank you for sharing. For accurate risk assessment, monitor heart rate, temperature, BP, and oxygen. If you notice rapid breathing, dizziness, or fever with chills, request emergency care.";
 };
 
-const formatDoctorName = (name) => (name?.startsWith("Dr.") ? name : `Dr. ${name}`);
+const formatDoctorName = (name = "") => {
+  const cleaned = name.trim();
+  return cleaned.startsWith("Dr.") ? cleaned : `Dr. ${cleaned}`;
+};
 
 export default function ChatPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const endOfMessagesRef = useRef(null);
-  const [input, setInput] = useState("");
+
   const [messages, setMessages] = useState([
     {
       id: "initial-bot-message",
@@ -85,6 +81,7 @@ export default function ChatPage() {
       text: INITIAL_MESSAGE,
     },
   ]);
+  const [input, setInput] = useState("");
 
   const doctor = useMemo(() => {
     if (location.state && typeof location.state === "object" && "name" in location.state) {
@@ -94,7 +91,6 @@ export default function ChatPage() {
         avatar: location.state.avatar || buildAvatar(location.state.name),
       };
     }
-
     return DEFAULT_DOCTOR;
   }, [location.state]);
 
@@ -104,10 +100,7 @@ export default function ChatPage() {
 
   const handleSend = () => {
     const trimmedMessage = input.trim();
-
-    if (!trimmedMessage) {
-      return;
-    }
+    if (!trimmedMessage) return;
 
     const userMessage = {
       id: `user-${Date.now()}`,
@@ -132,86 +125,90 @@ export default function ChatPage() {
     }
   };
 
+  const displayName =
+    formatDoctorName(doctor.name) !== "Dr. On-Call Specialist"
+      ? formatDoctorName(doctor.name)
+      : "Sepsis On-Call Assistant";
+
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-6 md:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-5xl flex-col gap-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B1220] text-[#172033] dark:text-[#F8FAFC] px-3 py-5 sm:px-6 md:px-8 transition-colors">
+      <div className="mx-auto flex max-w-5xl flex-col gap-5">
+        {/* Top Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#E2E8F0] dark:border-[#273449]">
           <div>
             <Link
               to="/doctor-consultant"
-              className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-700"
+              className="mb-2 inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#14B87A] dark:text-[#35D39A] hover:text-[#0F9F69] transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to consultants
+              Back to Consultants
             </Link>
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-              Consulting {formatDoctorName(doctor.name)!=="Dr. On-Call Specialist"?formatDoctorName(doctor.name):"Dr."}
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#172033] dark:text-[#F8FAFC]">
+              Consulting {displayName}
             </h1>
-            <p className="mt-2 text-slate-600">
-              Sepsis-only assistant support for symptom discussion, escalation prompts, and clinical urgency cues.
+            <p className="text-xs sm:text-sm text-[#526174] dark:text-[#94A3B8] mt-0.5">
+              Interactive sepsis guidance for symptom evaluation and clinical urgency cues.
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => navigate("/doctor-consultant")}
-            className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-rose-200 hover:text-rose-600"
-          >
-            View Doctors
-          </button>
+          <div className="flex items-center gap-2.5 self-start sm:self-auto">
+            <button
+              type="button"
+              onClick={() => navigate("/doctor-consultant")}
+              className="inline-flex items-center justify-center rounded-xl border border-[#E2E8F0] dark:border-[#273449] bg-[#FFFFFF] dark:bg-[#172033] px-3.5 py-1.5 text-xs font-semibold text-[#526174] dark:text-[#CBD5E1] shadow-xs hover:border-[#14B87A] dark:hover:border-[#35D39A] cursor-pointer"
+            >
+              View Specialists
+            </button>
+            <ThemeToggle size="sm" />
+          </div>
         </div>
 
-        <section className="overflow-hidden rounded-3xl bg-white shadow-sm">
-          <div className="border-b border-slate-100 px-6 py-5">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-4">
+        {/* Chat Card */}
+        <section className="overflow-hidden rounded-2xl bg-[#FFFFFF] dark:bg-[#172033] border border-[#E2E8F0] dark:border-[#273449] shadow-xs">
+          {/* Doctor Header Banner */}
+          <div className="border-b border-[#E2E8F0] dark:border-[#273449] px-4 py-3.5 sm:px-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
                 <img
                   src={doctor.avatar}
                   alt={doctor.name}
-                  className="h-16 w-16 rounded-2xl object-cover ring-4 ring-rose-50"
+                  className="h-12 w-12 rounded-xl object-cover ring-2 ring-[#E8F8F2] dark:ring-[#14B87A]/30"
                 />
                 <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="text-xl font-semibold text-slate-900">{formatDoctorName(doctor.name)!=="Dr. On-Call Specialist"?formatDoctorName(doctor.name):"Dr."}</h2>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700">
-                      <ShieldAlert className="h-3.5 w-3.5" />
-                      {formatDoctorName(doctor.name)!=="Dr. On-Call Specialist"?"Sepsis Specialist":""}
-                      
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h2 className="text-base font-bold text-[#172033] dark:text-[#F8FAFC]">{displayName}</h2>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#E8F8F2] dark:bg-[#14B87A]/20 border border-[#A8E3CF] dark:border-[#14B87A]/40 px-2 py-0.5 text-[10px] font-bold text-[#0F9F69] dark:text-[#35D39A]">
+                      <ShieldAlert className="h-3 w-3" />
+                      Sepsis Specialist
                     </span>
                   </div>
-                  <p className="mt-2 text-sm text-slate-500">{doctor.experience}</p>
+                  <p className="text-xs text-[#526174] dark:text-[#94A3B8]">{doctor.experience}</p>
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                  <Stethoscope className="h-4 w-4 text-rose-500" />
-                  Sepsis consultation active
+              <div className="rounded-xl bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#273449] px-3 py-1.5 text-xs">
+                <div className="flex items-center gap-1.5 font-semibold text-[#172033] dark:text-[#CBD5E1]">
+                  <Stethoscope className="h-3.5 w-3.5 text-[#14B87A]" />
+                  Active Session
                 </div>
-                <p className="mt-1 text-xs text-slate-500">Share symptoms clearly for focused guidance.</p>
               </div>
             </div>
           </div>
 
-          <div className="grid gap-0 lg:grid-cols-[1fr_280px]">
-            <div className="flex min-h-[560px] flex-col">
-              <div className="flex-1 space-y-4 overflow-y-auto bg-slate-50 px-6 py-6">
+          <div className="grid gap-0 lg:grid-cols-[1fr_260px]">
+            {/* Messages Area */}
+            <div className="flex min-h-[480px] flex-col">
+              <div className="flex-1 space-y-3 overflow-y-auto bg-[#F8FAFC]/70 dark:bg-[#0B1220]/70 p-4 sm:p-5">
                 {messages.map((message) => (
-                  <ChatBubble
-                    key={message.id}
-                    message={message}
-                    doctorName={formatDoctorName(doctor.name)!=="Dr. On-Call Specialist"?formatDoctorName(doctor.name):"Dr."}
-                  />
+                  <ChatBubble key={message.id} message={message} doctorName={displayName} />
                 ))}
                 <div ref={endOfMessagesRef} />
               </div>
 
-              <div className="border-t border-slate-100 bg-white px-6 py-5">
-                <div className="flex items-end gap-3">
+              {/* Input Area */}
+              <div className="border-t border-[#E2E8F0] dark:border-[#273449] bg-[#FFFFFF] dark:bg-[#172033] p-3 sm:p-4">
+                <div className="flex items-end gap-2">
                   <div className="flex-1">
-                    <label htmlFor="chat-message" className="sr-only">
-                      Type your symptom message
-                    </label>
                     <textarea
                       id="chat-message"
                       value={input}
@@ -219,46 +216,55 @@ export default function ChatPage() {
                       onKeyDown={handleKeyDown}
                       rows={2}
                       placeholder="Describe sepsis-related symptoms, vitals, or concerns..."
-                      className="w-full resize-none rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-rose-300 focus:ring-2 focus:ring-rose-200"
+                      className="w-full resize-none rounded-xl border border-[#CBD5E1] dark:border-[#273449] bg-[#FFFFFF] dark:bg-[#1E293B] px-3.5 py-2.5 text-xs sm:text-sm text-[#172033] dark:text-[#F8FAFC] outline-none placeholder:text-[#94A3B8] focus:border-[#14B87A] focus:ring-1 focus:ring-[#14B87A]"
                     />
                   </div>
                   <button
                     type="button"
                     onClick={handleSend}
-                    className="inline-flex h-12 w-12 mb-4 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-sm shadow-rose-200 transition duration-300 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-rose-300 focus:ring-offset-2"
+                    className="inline-flex h-10 w-10 sm:h-11 sm:w-11 mb-1 shrink-0 items-center justify-center rounded-xl bg-[#14B87A] hover:bg-[#0F9F69] text-white shadow-xs transition active:scale-95 cursor-pointer"
                     aria-label="Send message"
                   >
-                    <Send className="h-5 w-5" />
+                    <Send className="h-4.5 w-4.5" />
                   </button>
                 </div>
               </div>
             </div>
 
-            <aside className="border-t border-slate-100 bg-white px-6 py-6 lg:border-l lg:border-t-0">
-              <div className="rounded-2xl bg-gradient-to-br from-red-500 to-pink-500 p-5 text-white shadow-sm">
-                <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-white/80">
-                  <Bot className="h-4 w-4" />
-                  Sepsis Assistant
+            {/* Quick Prompts Sidebar */}
+            <aside className="border-t border-[#E2E8F0] dark:border-[#273449] bg-[#FFFFFF] dark:bg-[#172033] p-4 lg:border-l lg:border-t-0 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="rounded-xl bg-gradient-to-br from-[#14B87A] to-[#0F766E] p-4 text-white shadow-xs">
+                  <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white/90">
+                    <Bot className="h-3.5 w-3.5" />
+                    Clinical Guidance
+                  </div>
+                  <p className="mt-2 text-xs font-semibold leading-relaxed">
+                    Escalate immediately if heart rate &gt; 90 bpm, temp &gt; 38°C, or SpO2 &lt; 92%.
+                  </p>
                 </div>
-                <p className="mt-3 text-lg font-semibold">High-risk symptoms should be escalated immediately.</p>
-                <p className="mt-2 text-sm leading-6 text-white/85">
-                  Low oxygen, low blood pressure, confirmed infection, and worsening fever can all signal urgent sepsis risk.
-                </p>
-              </div>
 
-              <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50 p-5">
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">Quick prompts</p>
-                <div className="mt-4 space-y-2">
-                  {["I have fever and infection", "My heart rate is high", "Low oxygen with sepsis concern"].map((prompt) => (
-                    <button
-                      key={prompt}
-                      type="button"
-                      onClick={() => setInput(prompt)}
-                      className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5   text-left text-sm text-slate-600 transition hover:border-rose-200 hover:text-rose-600"
-                    >
-                      {prompt}
-                    </button>
-                  ))}
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#7A8798] dark:text-[#94A3B8]">
+                    Quick Prompts
+                  </p>
+                  <div className="mt-2 space-y-2">
+                    {[
+                      "I have fever and infection",
+                      "My heart rate is high (110 bpm)",
+                      "Low oxygen reading with chills",
+                      "What are early signs of sepsis?",
+                    ].map((prompt) => (
+                      <button
+                        key={prompt}
+                        type="button"
+                        onClick={() => setInput(prompt)}
+                        className="w-full rounded-xl border border-[#E2E8F0] dark:border-[#273449] bg-[#F8FAFC] dark:bg-[#1E293B] p-2.5 text-left text-xs font-medium text-[#526174] dark:text-[#CBD5E1] hover:border-[#A8E3CF] dark:hover:border-[#14B87A]/50 hover:text-[#0F9F69] dark:hover:text-[#35D39A] transition-colors cursor-pointer"
+                      >
+                        {prompt}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </aside>

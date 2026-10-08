@@ -1,6 +1,8 @@
-import { BriefcaseMedical, ShieldAlert } from "lucide-react";
+import React from "react";
+import { BriefcaseMedical, Stethoscope } from "lucide-react";
+import Button from "./Button";
 
-const buildInitialsAvatar = (name, from = "#ef4444", to = "#ec4899") => {
+const buildInitialsAvatar = (name, from = "#14B87A", to = "#0F9F69") => {
   const cleanedName = name.replace(/^Dr\.?\s*/i, "").trim();
   const initials = cleanedName
     .split(" ")
@@ -18,8 +20,8 @@ const buildInitialsAvatar = (name, from = "#ef4444", to = "#ec4899") => {
         </linearGradient>
       </defs>
       <rect width="160" height="160" rx="40" fill="url(#bg)" />
-      <circle cx="80" cy="60" r="26" fill="rgba(255,255,255,0.18)" />
-      <path d="M38 132c5-24 24-38 42-38s37 14 42 38" fill="rgba(255,255,255,0.18)" />
+      <circle cx="80" cy="60" r="26" fill="rgba(255,255,255,0.2)" />
+      <path d="M38 132c5-24 24-38 42-38s37 14 42 38" fill="rgba(255,255,255,0.2)" />
       <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#ffffff">
         ${initials || "DR"}
       </text>
@@ -33,39 +35,46 @@ export default function DoctorCard({ doctor, onConsult }) {
   const avatar = doctor.avatar || buildInitialsAvatar(doctor.name);
 
   return (
-    <article className="rounded-xl border border-rose-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:scale-[1.02]">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <img
-            src={avatar}
-            alt={doctor.name}
-            className="h-16 w-16 rounded-2xl object-cover ring-4 ring-rose-50"
-          />
-          <div>
-            <h3 className="text-xl font-semibold text-slate-900">{doctor.name}</h3>
-            <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700">
-              <ShieldAlert className="h-3.5 w-3.5" />
-              <span>Sepsis Specialist</span>
-            </div>
+    <article className="rounded-2xl border border-[#E2E8F0] dark:border-[#273449] bg-white dark:bg-[#172033] p-5 shadow-xs transition duration-200 hover:-translate-y-0.5 hover:shadow-sm">
+      <div className="flex items-center gap-3.5">
+        <img
+          src={avatar}
+          alt={doctor.name}
+          className="h-13 w-13 rounded-2xl object-cover ring-2 ring-[#A8E3CF] dark:ring-[#14B87A]/30"
+        />
+        <div className="min-w-0 flex-1">
+          <h3 className="text-sm sm:text-base font-bold text-[#172033] dark:text-[#F8FAFC] truncate">
+            {doctor.name}
+          </h3>
+          <div className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-[#E8F8F2] dark:bg-[#14B87A]/15 border border-[#A8E3CF] dark:border-[#14B87A]/30 px-2.5 py-0.5 text-[11px] font-semibold text-[#0F9F69] dark:text-[#35D39A]">
+            <Stethoscope className="h-3 w-3" />
+            <span>Sepsis Consultant</span>
           </div>
         </div>
       </div>
 
-      <div className="mt-5 flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3 text-slate-600">
-        <BriefcaseMedical className="h-5 w-5 text-rose-500" />
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">Experience</p>
-          <p className="text-sm font-semibold text-slate-800">{doctor.experience}</p>
+      <div className="mt-3.5 flex items-center gap-2.5 rounded-xl bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#273449] px-3 py-2 text-[#526174] dark:text-[#CBD5E1]">
+        <BriefcaseMedical className="h-4 w-4 text-[#14B87A] dark:text-[#35D39A] shrink-0" />
+        <div className="min-w-0">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#7A8798] dark:text-[#94A3B8]">
+            Clinical Practice
+          </p>
+          <p className="text-xs font-bold text-[#172033] dark:text-[#F8FAFC]">
+            {doctor.experience}
+          </p>
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={() => onConsult(doctor)}
-        className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-red-500 to-pink-500 px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-rose-200 transition duration-300 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-rose-300 focus:ring-offset-2"
-      >
-        Consult Now
-      </button>
+      <div className="mt-4">
+        <Button
+          variant="primary"
+          size="sm"
+          className="w-full"
+          onClick={() => onConsult(doctor)}
+        >
+          Consult Specialist
+        </Button>
+      </div>
     </article>
   );
 }

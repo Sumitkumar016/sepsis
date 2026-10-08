@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
-import { Mail, Lock, HeartPulse, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
-
-
+import React, { useState } from "react";
+import { Mail, Lock, HeartPulse, ArrowRight, Loader2, AlertCircle } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { postLogin } from "../store/auth";
 import { getUserData } from "../store/user";
 import { normalizeEmail } from "../store/firestoreUtils";
+import ThemeToggle from "../components/ThemeToggle";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -47,133 +46,114 @@ export default function Login() {
       } else {
         setError(resultAction.payload);
       }
-
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {
       setIsLoading(false);
     }
   };
-  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (error) setError('');
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (error) setError("");
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4 relative overflow-hidden font-sans selection:bg-red-500/30">
-      
-      {/* Background ambient glows */}
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-red-600/20 blur-[120px] rounded-full pointer-events-none mix-blend-screen"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-pink-600/10 blur-[100px] rounded-full pointer-events-none mix-blend-screen"></div>
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B1220] flex items-center justify-center p-4 relative font-sans transition-colors">
+      {/* Top right theme toggle */}
+      <div className="absolute top-5 right-5 z-20">
+        <ThemeToggle size="sm" />
+      </div>
 
       {/* Login Card */}
-      <div className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.5)] relative z-10 transition-all duration-300 hover:shadow-[0_0_50px_rgba(239,68,68,0.15)]">
-        
-        {/* Logo / Header */}
-        <div className="flex flex-col items-center mb-8 text-center">
-          <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg shadow-red-500/30 mb-4 animate-pulse">
-            <HeartPulse className="w-8 h-8 text-white" />
+      <div className="w-full max-w-md bg-[#FFFFFF] dark:bg-[#172033] border border-[#E2E8F0] dark:border-[#273449] p-6 sm:p-8 rounded-2xl shadow-sm relative z-10 transition-all">
+        {/* Header */}
+        <div className="flex flex-col items-center mb-6 text-center">
+          <div className="w-12 h-12 bg-[#14B87A] rounded-xl flex items-center justify-center shadow-xs mb-3">
+            <HeartPulse className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-red-400 to-pink-400 bg-clip-text text-transparent">
-            SepsisAI
+          <h1 className="text-xl sm:text-2xl font-bold text-[#172033] dark:text-[#F8FAFC]">
+            SepsisAI Portal
           </h1>
-          <p className="text-slate-400 text-sm mt-2">Sign in to your dashboard</p>
+          <p className="text-[#526174] dark:text-[#94A3B8] text-xs sm:text-sm mt-1">
+            Sign in to access patient monitoring
+          </p>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="mb-6 p-3 bg-red-500/10 border border-red-500/30 rounded-lg flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
-            <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-            <p className="text-sm text-red-200">{error}</p>
+          <div className="mb-4 p-3 bg-[#FEF2F2] dark:bg-[#2A1517] border border-[#F5B5B5] dark:border-[#4C1D24] rounded-xl flex items-start gap-2.5">
+            <AlertCircle className="w-4 h-4 text-[#DC2626] shrink-0 mt-0.5" />
+            <p className="text-xs text-[#DC2626] dark:text-[#F87171]">{error}</p>
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
-          
-          {/* Email Input */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium text-slate-300">Email Address</label>
-            <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-red-400 transition-colors duration-300" />
-              </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-[#172033] dark:text-[#F8FAFC]">
+              Email Address
+            </label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#7A8798] dark:text-[#94A3B8] pointer-events-none" />
               <input
                 type="email"
                 name="email"
-                placeholder="admin@hospital.com"
+                placeholder="doctor@hospital.org"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full bg-black/20 border border-slate-700/50 rounded-xl py-3 pl-11 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all duration-300 shadow-inner"
+                className="w-full bg-[#FFFFFF] dark:bg-[#1E293B] border border-[#CBD5E1] dark:border-[#273449] rounded-xl py-2.5 pl-9 pr-3 text-xs sm:text-sm text-[#172033] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none focus:border-[#14B87A] focus:ring-2 focus:ring-[#14B87A]/20 transition-colors"
                 disabled={isLoading}
               />
             </div>
           </div>
 
-          {/* Password Input */}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-slate-300">Password</label>
-              <a href="#" className="text-xs font-medium text-red-400 hover:text-red-300 transition-colors">
-                Forgot Password?
-              </a>
-            </div>
-            <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-red-400 transition-colors duration-300" />
-              </div>
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-[#172033] dark:text-[#F8FAFC]">
+              Password
+            </label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#7A8798] dark:text-[#94A3B8] pointer-events-none" />
               <input
                 type="password"
                 name="password"
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleInputChange}
-                className="w-full bg-black/20 border border-slate-700/50 rounded-xl py-3 pl-11 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all duration-300 shadow-inner"
+                className="w-full bg-[#FFFFFF] dark:bg-[#1E293B] border border-[#CBD5E1] dark:border-[#273449] rounded-xl py-2.5 pl-9 pr-3 text-xs sm:text-sm text-[#172033] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none focus:border-[#14B87A] focus:ring-2 focus:ring-[#14B87A]/20 transition-colors"
                 disabled={isLoading}
               />
             </div>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full relative group overflow-hidden bg-gradient-to-r from-red-600 to-pink-600 text-white font-semibold py-3.5 px-4 rounded-xl shadow-[0_0_20px_rgba(225,29,72,0.3)] hover:shadow-[0_0_30px_rgba(225,29,72,0.5)] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+            className="w-full bg-[#14B87A] hover:bg-[#0F9F69] active:bg-[#0F9F69] text-white font-semibold py-2.5 px-4 rounded-xl shadow-xs transition duration-200 disabled:opacity-60 cursor-pointer text-xs sm:text-sm flex items-center justify-center gap-2 mt-2"
           >
-            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
-            <div className="relative flex items-center justify-center gap-2">
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Authenticating...</span>
-                </>
-              ) : (
-                <>
-                  <span>Sign In</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
-            </div>
+            {isLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Authenticating...</span>
+              </>
+            ) : (
+              <>
+                <span>Sign In</span>
+                <ArrowRight className="w-4 h-4" />
+              </>
+            )}
           </button>
         </form>
 
-        {/* Footer */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-slate-400">
-            Don't have an account?{' '}
-            <Link to="/signup" className="font-semibold text-white hover:text-red-400 transition-colors">
-              Sign Up
+        <div className="mt-6 text-center">
+          <p className="text-xs text-[#526174] dark:text-[#94A3B8]">
+            Don't have an account?{" "}
+            <Link to="/signup" className="font-semibold text-[#14B87A] dark:text-[#35D39A] hover:underline">
+              Create an Account
             </Link>
           </p>
         </div>
-        
-      </div>
-      
-      {/* Decorative elements */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs text-slate-500 font-medium tracking-widest uppercase">
-        Early Sepsis Risk Prediction System • Restricted Access
       </div>
     </div>
   );
